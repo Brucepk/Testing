@@ -1,0 +1,96 @@
+抓包工具第一篇文章我们讲过，主要有 Charles 和 Fiddler，关于 Fiddler 抓包 APP 的，我之前写过一篇文章：[Fiddler抓包APP教程](https://www.pyzhishiquan.com/fiddler-app.html)，Fiddler 抓包 App 请直接参考这篇文章。
+
+今天重点讲下 Charles 抓包 APP。
+
+首先，Charles 抓包工具是付费的，不付费的话每隔 30 分钟 Charles 就会重启一次，很烦人，网上有很多破解的 jar 包，大家自行搜索，这里就不提供方法了。
+
+## Charles 代理设置
+
+首先我们得在 Proxy--Proxy Setting 中设置代理端口号，默认 8888，一般用默认的就行，除非和电脑上其他端口有冲突，下面的勾√ 也有勾上，这是为了能抓取 HPPTS 数据的。
+
+![抓包设置](https://github.com/Brucepk/GitHub_Photos/blob/master/抓包设置.png)
+
+## 安装证书到电脑
+
+Charles 证书安装在电脑里，点击 Help--SSL Proxying--Install Charles Root Certificate
+![电脑安装证书](https://github.com/Brucepk/GitHub_Photos/blob/master/电脑安装证书.png)
+
+点击安装后，在证书列表里找到它，设置始终信任它就行，我这是 Mac，windows 好像更简单，全部下一步就行。
+
+![信任证书](https://github.com/Brucepk/GitHub_Photos/blob/master/信任证书.png)
+
+## 安装证书到手机
+首先，我们让手机和电脑子啊同一局域网下，先查看下电脑的 IP，Windows 电脑 cmd 里输入 ipconfig 命令查看 IP，Mac 电脑在终端输入 ifconfig 查看 IP，手机的无线网里设置代理，填上刚查到的 IP 和端口号 8888。
+
+![手机设置代理](https://github.com/Brucepk/GitHub_Photos/blob/master/手机设置代理.png)
+
+如果手机是第一次和电脑连接，Charles 上会有弹窗提示，选择 Allow 同意即可。
+
+![弹窗提示](https://github.com/Brucepk/GitHub_Photos/blob/master/弹窗提示.png)
+
+连上之后，我们点击 Help--SSL Proxying--Install Charles Root Certificate on a Mobile Devices or Remote Browser，这时会弹窗告诉我们怎么做。
+
+![下载手机证书](https://github.com/Brucepk/GitHub_Photos/blob/master/下载手机证书.png)
+
+弹窗的意思是让我们手机连上代理后，手机浏览器里输入 chls.pro/ssl 网址，下载安装证书。
+![下载证书](https://github.com/Brucepk/GitHub_Photos/blob/master/下载正式.png)
+
+下载后安装就可以了，我这是 Android 手机，苹果手机多一步信任证书的步骤，这点要注意。
+
+
+证书都安装完成后，操作手机上的 APP，就会抓到大量的数据信息了。
+
+![抓包信息](https://github.com/Brucepk/GitHub_Photos/blob/master/抓包信息.png)
+
+
+## 过滤信息
+
+信息太多，我们可以做下过滤，左下方 Filter，我们可以做下临时的过滤功能，比如我要抓取今日头条 APP 的 NBA 模块的内容，我们在 Filter 输入 snssdk，点击第一个域名下面，我们看到抓取到的新闻的标题信息。
+
+![抓取NBA信息](https://github.com/Brucepk/GitHub_Photos/blob/master/抓取NBA信息.png)
+
+## 不显示抓取数据
+假如你抓取的全部数据出现 unknown 的情况。
+
+![unknown](https://github.com/Brucepk/GitHub_Photos/blob/master/unknown.png)
+
+这时请在 Proxy--SSL Proxy Settings 中添加，在 Host 里输入 *，表示容许抓取所有数据。
+
+![加星号](https://github.com/Brucepk/GitHub_Photos/blob/master/加星号.png)
+
+如果加上之后还是显示 unknown，可能证书没装好或者过期了，电脑上和手机上的证书根据上面的步骤重装下。
+
+## 切换显示模式
+
+Charles 抓包的信息有两种显示方法，默认的是 Structure 信息流，你也可以切换成 Sequence 模式。
+
+![Sequence模式](https://github.com/Brucepk/GitHub_Photos/blob/master/Sequence模式.png)
+
+
+## 模拟网速
+Charles 可以模拟不同的网络情况，一般用在测试中，模拟不同的网络情况下软件是否运行正常。我们在 Proxy--Throttle Settings 中设置不同的网速。
+![模拟网速](https://github.com/Brucepk/GitHub_Photos/blob/master/模拟网速.png)
+
+## 断点
+什么是断点呢？开发的时候，经常需要对代码进行 debug 断点调试，让程序中断在需要的地方，从而方便其分析。Charles 中的断点功能也是类似的。这个功能主要是在测试过程中，对于有些极端的数字我们无法模拟的情况下，我们会设置断点该数据。举个例子，测试贷款业务，显示贷款金额，比如最大金额是 100000000，测试中这个数据不好造，我们需要测试下最大金额时页面显示的兼容性，是否会被截断或者不显示，这时可以借助断点，改变金额后返回给页面，页面显示的就是你修改之后的数据了。
+
+我们先对需要断点的域名设置断点。
+
+![设置断点](https://github.com/Brucepk/GitHub_Photos/blob/master/设置断点.png)
+
+注意是在主域名这里设置断点，不是在下面。
+
+比如我把文章标题改成「断点测试」，再次刷新页面，会触发断点。
+![触发断点](https://github.com/Brucepk/GitHub_Photos/blob/master/触发断点.png)
+
+不是我们要改的信息直接点击 Execute。
+
+比如在个人信息里，我把我的粉丝数量改成 999999999，看看手机页面显示，粉丝数量确实变了（如果真有这么多就好了）
+
+![9亿粉丝](https://github.com/Brucepk/GitHub_Photos/blob/master/9亿粉丝.png)
+将手机上的代理关闭，否则手机会上不了网。
+
+断点结束后，记得关闭断点，当电脑上的 Charles 抓包工具关闭时，记得
+
+以上就是 Charles 常用功能，如果遗漏，欢迎补充交流。
+
